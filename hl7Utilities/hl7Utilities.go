@@ -235,6 +235,8 @@ func parseTerserSpecification(specification string) (TerserSpecification, error)
 	return TerserSpecification{segment, repeat, fieldIndices}, nil
 }
 
+// parseFieldIndex takes a specification and breaks it apart into the field index AND the repeat
+// value, which defaults to 0, which is the first or only item
 func parseFieldIndex(specPart string) FieldIndex {
 	if strings.Contains(specPart, "(") && strings.Contains(specPart, ")") {
 		repeatStart := strings.Index(specPart, "(")

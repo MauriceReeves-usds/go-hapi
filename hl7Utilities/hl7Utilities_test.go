@@ -6,27 +6,27 @@ import (
 	"testing"
 )
 
-const mshMessage = "MSH|^~\\&|Mayo Clinic RD^2.16.840.1.113883.3.2.12.1^ISO|Mayo Clinic DLMP^2.16.840.1.113883.3.2.12.1.1^ISO|" +
+const mshMessage = "MSH|^~\\&|Ketchup Clinic RD^2.16.840.1.113883.3.2.12.1^ISO|Ketchup Clinic DLMP^2.16.840.1.113883.3.2.12.1.1^ISO|" +
 	"251-CDC-PRIORITY|251-CDC-PRIORITY|20220802003337-0500||ORU^R01^ORU_R01|2022080205333719454131|P|2.5.1|||NE|NE|USA||||" +
 	"PHLabReport-NoAck^HL7^2.16.840.1.113883.9.11^ISO"
 
 const simpleHl7Message = `
-MSH|^~\&|Mayo Clinic RD^2.16.840.1.113883.3.2.12.1^ISO|Mayo Clinic DLMP^2.16.840.1.113883.3.2.12.1.1^ISO|251-CDC-PRIORITY|251-CDC-PRIORITY|20220802003337-0500||ORU^R01^ORU_R01|2022080205333719454131|P|2.5.1|||NE|NE|USA||||PHLabReport-NoAck^HL7^2.16.840.1.113883.9.11^ISO
-SFT|Lawson^L^^^^MAYO RD&2.16.840.1.113883.3.2.12.1&ISO^XX^^^99999|19.1|Cloverleaf IE|9999||20101113
-PID|1||M177323145^^^Mayo Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^PI^MCLab-RO Main Campus&2.16.840.1.113883.3.2.12.1.2.1&ISO||LASTNAME^FIRSTNAME^MIDDLE|MAIDEN|19000101|M|ALIAS|UNK^UNKNOWN^HL70005^U^UNKNOWN^L^2.5.1^4|STREET1^STREET2^CITY^LA^70461^COUNTRY^^^COUNTY|||||||||||U^UNKNOWN^HL70189^U^UNKNOWN^L^2.5.1^4|||||||||||||337915000^Homo sapiens (organism)^SCT^human^human^L^07/31/2012^4
-ORC|RE|B523004918^Placer Order Number^2.16.840.1.113883.3.2.12.1.99^ISO|H823018568^Filler Order Number^2.16.840.1.113883.3.2.12.1.1^ISO|||||||||NPI^NEGROTTO GUNTHER^KATHERINE^^^^^^Ochsner Medical Cent&2.16.840.1.113883.3.2.12.1.99&ISO^L^^^PRN^Mayo Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^^^^^^^MD|7018377|^^^^^^|||||||Ochsner Medical Center North Shore|100 Medical Center Dr^^Slidell^LA^704615520|^WPN^PH^^1^985^6465060
-OBR|1|B523004918^Placer Order Number^2.16.840.1.113883.3.2.12.1.99^ISO|H823018568^Filler Order Number^2.16.840.1.113883.3.2.12.1.1^ISO|^^^MPXDX^Orthopoxvirus DNA, PCR, Swab^L^^U|||202207231050|||7018377^Ochsner Medical Center North Shore^9856465060|||||^^groin|NPI^NEGROTTO GUNTHER^KATHERINE^^^^^^Ochsner Medical Cent&2.16.840.1.113883.3.2.12.1.99&ISO^L^^^PRN^Mayo Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^^^^^^^MD||||||20220801145700-0500|||F
-OBX|1|CE|100434-0^Orthopoxvirus.non-variola DNA XXX Ql NAA+non-probe^LN^618596^Orthopoxvirus DNA, PCR^L^2.40^U||260415000^Undetected^SCT||Undetected||||F|||202207231050|24D0404292^Mayo Clinic Labs-Roch Main Campus^L||||20220801145700-0500||||MCLab-RO Main Campus^A^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^24D0404292|530 Hilton^Level 1^Rochester^MN^55905^USA^L
+MSH|^~\&|Ketchup Clinic RD^2.16.840.1.113883.3.2.12.1^ISO|Ketchup Clinic DLMP^2.16.840.1.113883.3.2.12.1.1^ISO|251-CDC-PRIORITY|251-CDC-PRIORITY|20220802003337-0500||ORU^R01^ORU_R01|2022080205333719454131|P|2.5.1|||NE|NE|USA||||PHLabReport-NoAck^HL7^2.16.840.1.113883.9.11^ISO
+SFT|Lawson^L^^^^Ketchup RD&2.16.840.1.113883.3.2.12.1&ISO^XX^^^99999|19.1|Cloverleaf IE|9999||20101113
+PID|1||M177323145^^^Ketchup Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^PI^MCLab-RO Main Campus&2.16.840.1.113883.3.2.12.1.2.1&ISO||LASTNAME^FIRSTNAME^MIDDLE|MAIDEN|19000101|M|ALIAS|UNK^UNKNOWN^HL70005^U^UNKNOWN^L^2.5.1^4|STREET1^STREET2^CITY^LA^90210^COUNTRY^^^COUNTY|||||||||||U^UNKNOWN^HL70189^U^UNKNOWN^L^2.5.1^4|||||||||||||337915000^Homo sapiens (organism)^SCT^human^human^L^07/31/2012^4
+ORC|RE|B523004918^Placer Order Number^2.16.840.1.113883.3.2.12.1.99^ISO|H823018568^Filler Order Number^2.16.840.1.113883.3.2.12.1.1^ISO|||||||||NPI^HOWSER^DOUGLAS^^^^^^Eastman Medical Center&2.16.840.1.113883.3.2.12.1.99&ISO^L^^^PRN^Ketchup Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^^^^^^^MD|7018377|^^^^^^|||||||Eastman Medical Center|1 Eastman Dr^^Beverly Hills^CA^90210|^WPN^PH^^1^555^555555
+OBR|1|B523004918^Placer Order Number^2.16.840.1.113883.3.2.12.1.99^ISO|H823018568^Filler Order Number^2.16.840.1.113883.3.2.12.1.1^ISO|^^^MPXDX^Orthopoxvirus DNA, PCR, Swab^L^^U|||202207231050|||7018377^Eastman Medical Center^9856465060|||||^^groin|NPI^NEGROTTO GUNTHER^KATHERINE^^^^^^Eastman Medical Center&2.16.840.1.113883.3.2.12.1.99&ISO^L^^^PRN^Ketchup Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^^^^^^^MD||||||20220801145700-0500|||F
+OBX|1|CE|100434-0^Orthopoxvirus.non-variola DNA XXX Ql NAA+non-probe^LN^618596^Orthopoxvirus DNA, PCR^L^2.40^U||260415000^Undetected^SCT||Undetected||||F|||202207231050|24D0404292^Ketchup Clinic Labs^L||||20220801145700-0500||||KCLab-RO Main Campus^A^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^24D0404292|1 Eastman^Level 1^Beverly Hills^CA^90210^USA^L
 NTE|1|L|Non-variola Orthopoxvirus DNA is not detected by real-time 
 NTE|2|L|PCR primer and probe set.
-SPM|1|B523004918&Placer_LIS&2.16.840.1.113883.3.2.12.1.99&ISO^H823018568&Mayo_LIS&2.16.840.113883.1.3.2.11.1&ISO||^^^groin^groin^L^^v1|||||||P^Patient^HL70369^P^Patient^L^2.5.1^V1|1^{#}&Number&UCUM&unit&unit&L&1.1&V1|||||20220723105000-0500|20220726152000-0500
+SPM|1|B523004918&Placer_LIS&2.16.840.1.113883.3.2.12.1.99&ISO^H823018568&Ketchup_LIS&2.16.840.113883.1.3.2.11.1&ISO||^^^groin^groin^L^^v1|||||||P^Patient^HL70369^P^Patient^L^2.5.1^V1|1^{#}&Number&UCUM&unit&unit&L&1.1&V1|||||20220723105000-0500|20220726152000-0500
 `
 
 func TestHl7Message_Get(t *testing.T) {
 	// test some MSH only values
 	cases := []struct{ spec, expectedValue string }{
-		{"MSH-3", "Mayo Clinic RD^2.16.840.1.113883.3.2.12.1^ISO"},
-		{"MSH-3-1", "Mayo Clinic RD"},
+		{"MSH-3", "Ketchup Clinic RD^2.16.840.1.113883.3.2.12.1^ISO"},
+		{"MSH-3-1", "Ketchup Clinic RD"},
 		{"MSH-3-2", "2.16.840.1.113883.3.2.12.1"},
 		{"MSH-3-3", "ISO"},
 		{"MSH-9", "ORU^R01^ORU_R01"},
@@ -121,7 +121,25 @@ func TestHl7Message_Preprocess(t *testing.T) {
 		want    MSH
 		wantErr bool
 	}{
-		{"test base MSH case", fields{simpleHl7Message, version, encodingCharacters, messageEvent, separator, MSH{}}, MSH{encodingCharacters, separator, version, messageEvent, mshParts}, false},
+		{
+			"test base MSH case",
+			fields{
+				simpleHl7Message,
+				version,
+				encodingCharacters,
+				messageEvent,
+				separator,
+				MSH{},
+			},
+			MSH{
+				encodingCharacters,
+				separator,
+				version,
+				messageEvent,
+				mshParts,
+			},
+			false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
