@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"hl7Decomposer/hl7Utilities"
 	"os"
 	"path/filepath"
 	"strings"
@@ -116,16 +115,11 @@ func walkResultsDirs(path string) {
 // our main method
 func main() {
 	// open our folder
-	dirPath := "/Users/maurice/Downloads/hl7/mayo-clinic/"
+	dirPath := "/Users/maurice/Downloads/hl7/"
 	// walk the directory
 	walkResultsDirs(dirPath)
 	// output our decomposed list of values
 	for _, entry := range results {
 		fmt.Println(entry)
 	}
-	hl7Message := hl7Utilities.Hl7Message{RawMessage: "MSH|^~\\&|Mayo Clinic RD^2.16.840.1.113883.3.2.12.1^ISO|Mayo Clinic DLMP^2.16.840.1.113883.3.2.12.1.1^ISO|251-CDC-PRIORITY|251-CDC-PRIORITY|20220728002328-0500||ORU^R01^ORU_R01|2022072805232819443001|T|2.5.1|||NE|NE|USA||||PHLabReport-NoAck^HL7^2.16.840.1.113883.9.11^ISO"}
-	fmt.Println(hl7Message)
-	v, err := hl7Message.Get("MSH-9-3")
-	check(err)
-	fmt.Println(*v)
 }
