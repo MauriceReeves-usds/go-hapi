@@ -13,7 +13,7 @@ const mshMessage = "MSH|^~\\&|Ketchup Clinic RD^2.16.840.1.113883.3.2.12.1^ISO|K
 const simpleHl7Message = `
 MSH|^~\&|Ketchup Clinic RD^2.16.840.1.113883.3.2.12.1^ISO|Ketchup Clinic DLMP^2.16.840.1.113883.3.2.12.1.1^ISO|251-CDC-PRIORITY|251-CDC-PRIORITY|20220802003337-0500||ORU^R01^ORU_R01|2022080205333719454131|P|2.5.1|||NE|NE|USA||||PHLabReport-NoAck^HL7^2.16.840.1.113883.9.11^ISO
 SFT|Lawson^L^^^^Ketchup RD&2.16.840.1.113883.3.2.12.1&ISO^XX^^^99999|19.1|Cloverleaf IE|9999||20101113
-PID|1||M177323145^^^Ketchup Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^PI^MCLab-RO Main Campus&2.16.840.1.113883.3.2.12.1.2.1&ISO||LASTNAME^FIRSTNAME^MIDDLE|MAIDEN|19000101|M|ALIAS|UNK^UNKNOWN^HL70005^U^UNKNOWN^L^2.5.1^4|STREET1^STREET2^CITY^LA^90210^COUNTRY^^^COUNTY|||||||||||U^UNKNOWN^HL70189^U^UNKNOWN^L^2.5.1^4|||||||||||||337915000^Homo sapiens (organism)^SCT^human^human^L^07/31/2012^4
+PID|1||M177323145^^^Ketchup Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^PI^MCLab-RO Main Campus&2.16.840.1.113883.3.2.12.1.2.1&ISO||LASTNAME^FIRSTNAME^MIDDLE|MAIDEN|19000101|M|ALIAS|UNK^UNKNOWN^HL70005^U^UNKNOWN^L^2.5.1^4|STREET1^STREET2^CITY^CA^90210^COUNTRY^^^COUNTY~STREET3^STREET4^CITY^CA^90210^COUNTRY^^^COUNTY|||||||||||U^UNKNOWN^HL70189^U^UNKNOWN^L^2.5.1^4|||||||||||||337915000^Homo sapiens (organism)^SCT^human^human^L^07/31/2012^4
 ORC|RE|B523004918^Placer Order Number^2.16.840.1.113883.3.2.12.1.99^ISO|H823018568^Filler Order Number^2.16.840.1.113883.3.2.12.1.1^ISO|||||||||NPI^HOWSER^DOUGLAS^^^^^^Eastman Medical Center&2.16.840.1.113883.3.2.12.1.99&ISO^L^^^PRN^Ketchup Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^^^^^^^MD|7018377|^^^^^^|||||||Eastman Medical Center|1 Eastman Dr^^Beverly Hills^CA^90210|^WPN^PH^^1^555^555555
 OBR|1|B523004918^Placer Order Number^2.16.840.1.113883.3.2.12.1.99^ISO|H823018568^Filler Order Number^2.16.840.1.113883.3.2.12.1.1^ISO|^^^MPXDX^Orthopoxvirus DNA, PCR, Swab^L^^U|||202207231050|||7018377^Eastman Medical Center^9856465060|||||^^groin|NPI^NEGROTTO GUNTHER^KATHERINE^^^^^^Eastman Medical Center&2.16.840.1.113883.3.2.12.1.99&ISO^L^^^PRN^Ketchup Clinic DLMP&2.16.840.1.113883.3.2.12.1.1&ISO^^^^^^^MD||||||20220801145700-0500|||F
 OBX|1|CE|100434-0^Orthopoxvirus.non-variola DNA XXX Ql NAA+non-probe^LN^618596^Orthopoxvirus DNA, PCR^L^2.40^U||260415000^Undetected^SCT||Undetected||||F|||202207231050|24D0404292^Ketchup Clinic Labs^L||||20220801145700-0500||||KCLab-RO Main Campus^A^^^^CLIA&2.16.840.1.113883.4.7&ISO^XX^^^24D0404292|1 Eastman^Level 1^Beverly Hills^CA^90210^USA^L
@@ -55,6 +55,15 @@ func TestHl7Message_Get(t *testing.T) {
 	}
 	if *value != "Cloverleaf IE" {
 		t.Logf("Value should be '%s' but got '%s'", "Cloverleaf IE", *value)
+		t.Fail()
+	}
+	value, err = hl7Message.Get("PID-11(1)-1")
+	if err != nil {
+		t.Log("error should be nil", err)
+		t.Fail()
+	}
+	if *value != "STREET3" {
+		t.Logf("Value should be '%s' but got '%s' instead", "STREET3", *value)
 		t.Fail()
 	}
 }
@@ -189,6 +198,7 @@ func Test_parseTerserSpecification(t *testing.T) {
 		{"test terser spec with long repeat", args{"OBR(99)-1"}, TerserSpecification{"OBR", 99, []FieldIndex{{1, 0}}}, false},
 		{"test terser spec with fail", args{"ZZZ(9)"}, TerserSpecification{}, true},
 		{"test terser spec with repeated field", args{"PID-11(0)-5"}, TerserSpecification{"PID", 1, []FieldIndex{{11, 0}, {5, 0}}}, false},
+		{"test terser spec with repeated field", args{"PID-11(1)-1"}, TerserSpecification{"PID", 1, []FieldIndex{{11, 1}, {1, 0}}}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

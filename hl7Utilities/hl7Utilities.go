@@ -148,8 +148,21 @@ func (message Hl7Message) Get(specification string) (*string, error) {
 	// load the first value
 	fieldIndex := terserSpec.FieldIndices[0]
 	value := targetSegment[fieldIndex.Index]
+	// handle repetition
+	if fieldIndex.Repeat != 0 {
+		repeatedFields := strings.Split(value, "~")
+		if int64(len(repeatedFields)) >= fieldIndex.Repeat {
+			value = repeatedFields[fieldIndex.Repeat]
+		}
+	}
 	// loop through the indices and split each time resetting the value of `value` based on the encoding char
 	for i, fieldIndex := range terserSpec.FieldIndices[1:] {
+		if fieldIndex.Repeat != 0 {
+			repeatedFields := strings.Split(value, "~")
+			if int64(len(repeatedFields)) >= fieldIndex.Repeat {
+				value = repeatedFields[fieldIndex.Repeat]
+			}
+		}
 		list := strings.Split(value, encodingChars[i])
 		value = list[fieldIndex.Index-1]
 	}
@@ -192,7 +205,6 @@ func parseTerserSpecification(specification string) (TerserSpecification, error)
 	var fieldIndices []FieldIndex
 	// get the segment the specification is for
 	segment := specification[0:3]
-	fmt.Println(segment)
 	// get the rest of the specification
 	remainder := specification[3:]
 	// split the remainder based on pipe
